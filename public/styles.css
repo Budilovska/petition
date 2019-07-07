@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+}
+
+body {
+    background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('cereal.jpeg');
+    background-size: cover;
+    display: flex;
+    align-items: flex-end;
+}
+
+canvas {
+    border: 1px solid magenta;
+}
+
+h1 {
+    color: white;
+    font-family: 'Poiret One', cursive;
+    font-size: 120px;
+}
+
+p {
+    color: white;
+    font-size: 16px;
+    font-family: serif;
+}
+
+.sign-container {
+    width: 400px;
+    border: 2px red;
+    width: 80%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#right-wrong {
+    height: 300px;
+}
+
+#hidden-input {
+    display: none;
+}
