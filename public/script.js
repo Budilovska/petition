@@ -3,7 +3,7 @@ console.log("Client-side is running");
 const canvas = document.querySelector("canvas");
 const submitBtn = document.getElementById("submit-btn");
 const c = canvas.getContext("2d");
-c.strokeStyle = "black";
+c.strokeStyle = "white";
 c.lineWidth = "1";
 
 const mousePos = { x: 0, y: 0 };
@@ -39,5 +39,4 @@ canvas.addEventListener("mousedown", function(e) {
 const dataUrl = document.getElementById("signature-inp");
 submitBtn.addEventListener("click", function() {
     dataUrl.value = canvas.toDataURL();
-    console.log(dataUrl);
 });

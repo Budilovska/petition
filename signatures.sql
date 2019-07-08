@@ -8,5 +8,18 @@ CREATE TABLE signatures(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+--run this command once when u create a table
+-- ALTER
+-- SELECT * FROM signatures;
 
-SELECT * FROM signatures;
+--we start a server, make a data base set in bash
+
+--create the database once
+-- run the create table command once
+-- and every time you change the create table command
+-- we run`
+-- spql nameOfDatabase -f nameofFile.sql in Terminal
+--
+-- every other command will be run in our server we'' create in our db.js file
+--
+-- every signle function defined in db.js will be invoked in our index.js
