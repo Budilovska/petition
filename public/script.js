@@ -3,7 +3,7 @@ console.log("Client-side is running");
 const canvas = document.querySelector("canvas");
 const submitBtn = document.getElementById("submit-btn");
 const c = canvas.getContext("2d");
-c.strokeStyle = "white";
+c.strokeStyle = "red";
 c.lineWidth = "1";
 
 const mousePos = { x: 0, y: 0 };
