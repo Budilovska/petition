@@ -1,10 +1,10 @@
-DROP TABLE IF EXISTS signatures;
-DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS signatures;
+-- DROP TABLE IF EXISTS users;
+-- DROP TABLE IF EXISTS user_profiles;
 
 CREATE TABLE signatures(
     id SERIAL PRIMARY KEY,
-    first VARCHAR(50) NOT NULL,
-    last VARCHAR(50) NOT NULL,
+    user_id INT REFERENCES users(id),
     signature TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -17,6 +17,16 @@ CREATE TABLE users(
     password VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE user_profiles(
+id SERIAL PRIMARY KEY,
+user_id INT REFERENCES users(id),
+age INT,
+city VARCHAR(100),
+homepage VARCHAR(300)
+);
+
+
 --run this command once when u create a table
 -- SELECT * FROM signatures;
 

@@ -43,6 +43,10 @@ app.use((req, res, next) => {
     }
 });
 
+app.get("/", (req, res) => {
+    res.redirect("/register");
+});
+
 app.get("/register", (req, res) => {
     res.render("register", {
         layout: "main"
@@ -56,7 +60,7 @@ app.post("/register", (req, res) => {
                 .then(result => {
                     console.log("You have a new user");
                     req.session.newUserId = result.rows[0].id;
-                    res.redirect("/petition");
+                    res.redirect("/profile");
             })
         })
         .catch(err => {
@@ -71,18 +75,17 @@ app.get("/log-in", (req, res) => {
 });
 
 app.post("/log-in", (req, res) => {
-    console.log(req.body.email);
-
+    // console.log(req.body.email);
     db.getPassword(req.body.email).then(hashPass => {
-        // console.log("HASHPASS:", hashPass.rows.length);
+        // console.log("HASHPASS:", hashPass.rows[0].id);
         // console.log("HASH IS:", hashPass.rows[0].password);
+        req.session.newUserId = hashPass.rows[0].id;
         if (hashPass.rows.length == 0) {
             res.render("log-in", {
                 noEmail: true
             });
         }
         return bc.checkPassword(req.body.password, hashPass.rows[0].password).then(result => {
-            console.log(result);
             if (result) {
                 res.redirect("/petition");
             } else {
@@ -97,15 +100,36 @@ app.post("/log-in", (req, res) => {
     });
 });
 
-
-app.get("/petition", (req, res) => {
-    res.render("petition", {
+app.get("/profile", (req, res) => {
+    res.render("profile", {
         layout: "main"
     });
 });
 
+app.post("/profile", (req, res) => {
+    db.profileInfo(req.body.age, req.body.city, req.body.homepage).then(result => {
+        res.redirect("/petition");
+    }).catch(err => {
+            console.log("error:", err);
+        });
+});
+
+
+app.get("/petition", (req, res) => {
+    db.getName(req.session.newUserId).then(name => {
+        console.log(name);
+        res.render("petition", {
+            userName: name.rows[0].first,
+            layout: "main"
+        });
+    })
+    .catch(err => {
+        console.log("error:", err);
+    });
+});
+
 app.post("/petition", (req, res) => {
-    db.newSigner(req.body.first, req.body.last, req.body.signature)
+    db.newSigner(req.body.signature)
         .then(result => {
             console.log("New person signed your petition!");
             req.session.signId = result.rows[0].id;
@@ -120,7 +144,6 @@ app.get("/thank-you", (req, res) => {
     db.allSigners()
         .then(total => {
             return db.getImage(req.session.signId).then(result => {
-                console.log(result.rows[0].signature);
                 res.render("thank-you", {
                     image: result.rows[0].signature,
                     total: total.rowCount,
@@ -169,21 +192,6 @@ app.listen(process.env.PORT || 8080, () => console.log("Listening!"));
 //     });
 // });
 
-//cookies are tiny, they can only store about 4kb
-//the signature is too big to store it in our cookie:
-// We can store an id of the signature
-
-// console.log(req.session.signId);
-// put data in my cookie:
-// req.session.sigId = true; //instead of res.cookie
-// req.session.muffin = 'blueberry';
-// req.session.sigId = 58; //we need to make ID 58 ore dynamic
-// figure out id that was just generated and pass it to this number
-
-///////
-//AUTH
-//////
-//
 // var bcrypt = require('bcryptjs');
 //
 // function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {

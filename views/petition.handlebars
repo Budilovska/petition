@@ -7,6 +7,8 @@
     </head>
 
 <body>
+<h2>We love you, {{userName}}!</h2>
+
         <h1>Milk Before Cereal</h1>
         <!-- <h1>You've been eating your cereal wrong</h1> -->
         <p>According to the research of leading professors of International University for Breakfast Sciences, only 8 percent of people eat their cereal right. Join our movement and spread a sacred knowledge throughout the world: Milk Before Cereal!</p>
@@ -16,8 +18,9 @@
             <!-- <img id="right-wrong" src="right-wrong.jpg"> -->
 <form action="/petition" method="post">
             <div class="sign-container">
-                <input name="first" placeholder="first name" type="text">
-                <input name="last" placeholder="last name" type="text">
+
+                <!-- <input name="first" placeholder="first name" type="text">
+                <input name="last" placeholder="last name" type="text"> -->
                 <input id="signature-inp" name="signature" type="hidden">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <canvas class="canv" width="500" height="150">
