@@ -1,6 +1,10 @@
 <h1>Please log in</h1>
 {{#if invalid}}
-<h5>The user name you have entered is invalid, try again</h5>
+<h5>The upassword you have entered is invalid, try again</h5>
+{{/if}}
+
+{{#if noEmail}}
+<h5>Your email address is invalid. Please enter a valid address or <a href="/register">register.</a></h5>
 {{/if}}
 <form action="/log-in" method="post">
             <div class="sign-container">

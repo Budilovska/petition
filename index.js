@@ -74,7 +74,13 @@ app.post("/log-in", (req, res) => {
     console.log(req.body.email);
 
     db.getPassword(req.body.email).then(hashPass => {
+        // console.log("HASHPASS:", hashPass.rows.length);
         // console.log("HASH IS:", hashPass.rows[0].password);
+        if (hashPass.rows.length == 0) {
+            res.render("log-in", {
+                noEmail: true
+            });
+        }
         return bc.checkPassword(req.body.password, hashPass.rows[0].password).then(result => {
             console.log(result);
             if (result) {
