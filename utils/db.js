@@ -1,6 +1,12 @@
 var spicedPg = require("spiced-pg");
+var db;
 
-var db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
+if(process.env.DATABASE_URL) {
+    db = spicedPg(process.env.DATABASE_URL)
+} else {
+    db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
+}
+
 
 exports.allSigners = function() {
     return db.query("SELECT * FROM signatures");

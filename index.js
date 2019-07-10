@@ -151,7 +151,7 @@ app.get("/signed", (req, res) => {
     // you can render it on screen by putting it in an image tag
 });
 
-app.listen(8080, () => console.log("Listening!"));
+app.listen(process.env.PORT || 8080, () => console.log("Listening!"));
 
 // app.get('/cities', (req, res) => {
 //     db.getCities().then(results => {
