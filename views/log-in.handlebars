@@ -1,0 +1,13 @@
+<h1>Please log in</h1>
+{{#if invalid}}
+<h5>The user name you have entered is invalid, try again</h5>
+{{/if}}
+<form action="/log-in" method="post">
+            <div class="sign-container">
+                <input name="email" placeholder="Email Address" type="text">
+                <input name="password" placeholder="Password" type="password">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <h3>If you are already a member, please <a href="/log-in">log in.</a></h3>
+                <button id="login-btn">Log in</button>
+            </div>
+        </form>

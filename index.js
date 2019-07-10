@@ -1,9 +1,11 @@
 const express = require("express");
 const hb = require("express-handlebars");
 const db = require("./utils/db");
+const bc = require("./utils/bc");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 var cookieSession = require("cookie-session");
+const csurf = require("csurf");
 const app = express();
 
 app.use(express.static("./public"));
@@ -12,6 +14,7 @@ app.use(
         extended: false
     })
 );
+
 app.use(require("cookie-parser")());
 
 app.use(
@@ -20,6 +23,14 @@ app.use(
         maxAge: 1000 * 60 * 60 * 24 * 14 //in two weeks cookie will be deleted
     })
 );
+
+app.use(csurf());
+
+app.use((req, res, next) => {
+    res.set("x-frame-options", "deny");
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
 
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
@@ -31,6 +42,55 @@ app.use((req, res, next) => {
         next();
     }
 });
+
+app.get("/register", (req, res) => {
+    res.render("register", {
+        layout: "main"
+    });
+});
+
+app.post("/register", (req, res) => {
+        bc.hashPassword(req.body.password).then(hashPass => {
+        // console.log("HASH IS:", hashPass);
+                return db.registerUser(req.body.first, req.body.last, req.body.email, hashPass)
+                .then(result => {
+                    console.log("You have a new user");
+                    req.session.newUserId = result.rows[0].id;
+                    res.redirect("/petition");
+            })
+        })
+        .catch(err => {
+            console.log("error:", err);
+        });
+});
+
+app.get("/log-in", (req, res) => {
+    res.render("log-in", {
+        layout: "main"
+    });
+});
+
+app.post("/log-in", (req, res) => {
+    console.log(req.body.email);
+
+    db.getPassword(req.body.email).then(hashPass => {
+        // console.log("HASH IS:", hashPass.rows[0].password);
+        return bc.checkPassword(req.body.password, hashPass.rows[0].password).then(result => {
+            console.log(result);
+            if (result) {
+                res.redirect("/petition");
+            } else {
+                res.render("log-in", {
+                    invalid: true
+                });
+            }
+        })
+    })
+    .catch(err => {
+        console.log("error:", err);
+    });
+});
+
 
 app.get("/petition", (req, res) => {
     res.render("petition", {
@@ -113,3 +173,24 @@ app.listen(8080, () => console.log("Listening!"));
 // req.session.muffin = 'blueberry';
 // req.session.sigId = 58; //we need to make ID 58 ore dynamic
 // figure out id that was just generated and pass it to this number
+
+///////
+//AUTH
+//////
+//
+// var bcrypt = require('bcryptjs');
+//
+// function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
+//     return new Promise(function(resolve, reject) {
+//         bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
+//             if (err) {
+//                 reject(err);
+//             } else {
+//                 resolve(doesMatch);
+//             }
+//         });
+//     });
+// }
+//
+// if doesMatch is true, we let the user to log in, if it's false - the user can't login
+//we pass to textEnteredInLoginForm the password that user put in the input field

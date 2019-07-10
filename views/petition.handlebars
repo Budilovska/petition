@@ -18,14 +18,14 @@
             <div class="sign-container">
                 <input name="first" placeholder="first name" type="text">
                 <input name="last" placeholder="last name" type="text">
-                <input id="signature-inp" name="signature" type="text">
+                <input id="signature-inp" name="signature" type="hidden">
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <canvas class="canv" width="500" height="150">
                 </canvas>
                 <h3>Sign here</h3>
                 <button id="submit-btn">submit</button>
             </div>
         </form>
-                        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
             <script src="script.js" charset="utf-8"></script>
     </body>
 </html>

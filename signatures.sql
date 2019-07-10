@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS signatures;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE signatures(
     id SERIAL PRIMARY KEY,
@@ -8,8 +9,15 @@ CREATE TABLE signatures(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE users(
+    id SERIAL PRIMARY KEY,
+    first VARCHAR(50) NOT NULL,
+    last VARCHAR(50) NOT NULL,
+    email VARCHAR(200) UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 --run this command once when u create a table
--- ALTER
 -- SELECT * FROM signatures;
 
 --we start a server, make a data base set in bash
@@ -18,7 +26,7 @@ CREATE TABLE signatures(
 -- run the create table command once
 -- and every time you change the create table command
 -- we run`
--- spql nameOfDatabase -f nameofFile.sql in Terminal
+-- psql nameOfDatabase -f nameofFile.sql in Terminal
 --
 -- every other command will be run in our server we'' create in our db.js file
 --
