@@ -7,26 +7,27 @@
     </head>
 
 <body>
+    <nav>
 <h2>We love you, {{userName}}!</h2>
+    </nav>
+
 
         <h1>Milk Before Cereal</h1>
         <!-- <h1>You've been eating your cereal wrong</h1> -->
-        <p>According to the research of leading professors of International University for Breakfast Sciences, only 8 percent of people eat their cereal right. Join our movement and spread a sacred knowledge throughout the world: Milk Before Cereal!</p>
+        <!-- <p>According to the research of leading professors of International University for Breakfast Sciences, only 8 percent of people eat their cereal right. Join our movement and spread a sacred knowledge throughout the world: Milk Before Cereal!</p> -->
             <!-- <p>You pour cereal before milk. This makes it hard to see how much milk you’re pouring, so you almost always end up with a pool of it at the bottom of the bowl. For a better cereal-to-milk ratio, pour the milk first and top with a scoop of cereal
             </p> -->
 
-            <!-- <img id="right-wrong" src="right-wrong.jpg"> -->
 <form action="/petition" method="post">
             <div class="sign-container">
 
-                <!-- <input name="first" placeholder="first name" type="text">
-                <input name="last" placeholder="last name" type="text"> -->
                 <input id="signature-inp" name="signature" type="hidden">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 <canvas class="canv" width="500" height="150">
                 </canvas>
                 <h3>Sign here</h3>
                 <button id="submit-btn">submit</button>
+                <button id="logout-btn">log out</button>
             </div>
         </form>
             <script src="script.js" charset="utf-8"></script>

@@ -1,6 +1,6 @@
 <h1>Please log in</h1>
 {{#if invalid}}
-<h5>The upassword you have entered is invalid, try again</h5>
+<h5>The password you have entered is invalid, try again</h5>
 {{/if}}
 
 {{#if noEmail}}
@@ -11,7 +11,7 @@
                 <input name="email" placeholder="Email Address" type="text">
                 <input name="password" placeholder="Password" type="password">
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <h3>If you are already a member, please <a href="/log-in">log in.</a></h3>
+
                 <button id="login-btn">Log in</button>
             </div>
         </form>

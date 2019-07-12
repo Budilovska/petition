@@ -1,12 +1,14 @@
 const express = require("express");
+const app = exports.app = express();
 const hb = require("express-handlebars");
 const db = require("./utils/db");
 const bc = require("./utils/bc");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 var cookieSession = require("cookie-session");
+// const {requireLoggedOut,
+//         requireSignature, requireNoSignature} = require('./middleware');
 const csurf = require("csurf");
-const app = express();
 
 app.use(express.static("./public"));
 app.use(
@@ -32,20 +34,37 @@ app.use((req, res, next) => {
     next();
 });
 
+// app.use((req, res, next) => {
+// //check to see if they're loged in - send them to register, if they're loged in - let them go wherevver they need
+// if (!req.session.newUserId && req.url !="/register" && eq.url !="/log-in") {
+//     res.redirect("/register")
+// } else {
+//     next();
+// }
+// });
+
+
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
-
-app.use((req, res, next) => {
-    if (req.session.signId && req.url == "/petition") {
-        res.redirect("/signed");
-    } else {
-        next();
-    }
-});
+//
+// app.use((req, res, next) => {
+//     if (req.session.signatureId && req.url == "/petition") {
+//         res.redirect("/signed");
+//     } else {
+//         next();
+//     }
+// });
 
 app.get("/", (req, res) => {
     res.redirect("/register");
 });
+
+// function requireLoggedOut(req, res, next) {
+//     if (req.session.newUserId) {
+//         return res.redirect('/petition')
+//     }
+//     next();
+// }
 
 app.get("/register", (req, res) => {
     res.render("register", {
@@ -75,30 +94,38 @@ app.get("/log-in", (req, res) => {
 });
 
 app.post("/log-in", (req, res) => {
-    // console.log(req.body.email);
-    db.getPassword(req.body.email).then(hashPass => {
-        // console.log("HASHPASS:", hashPass.rows[0].id);
-        // console.log("HASH IS:", hashPass.rows[0].password);
-        req.session.newUserId = hashPass.rows[0].id;
-        if (hashPass.rows.length == 0) {
-            res.render("log-in", {
-                noEmail: true
-            });
+    db.getPasswordCheckIfSigned(req.body.email).then(infos => {
+        // console.log("infos.rows[0].signature", infos.rows[0].signature);
+        req.session.newUserId = infos.rows[0].id;
+        if (infos.rows[0].signature == null) {
+            console.log("HAS NOT SIGNED YET");
+            res.redirect("/petition");
+        } else {
+            req.session.signatureId = true;
+            res.redirect("/thank-you");
         }
-        return bc.checkPassword(req.body.password, hashPass.rows[0].password).then(result => {
-            if (result) {
-                res.redirect("/petition");
-            } else {
+        return bc.checkPassword(req.body.password, infos.rows[0].password)
+        .then(result => {
+            if (!result) {
                 res.render("log-in", {
                     invalid: true
-                });
-            }
-        })
-    })
+                }); //closes render
+            } //closes else
+        })  //closes then
+    }) //closes  getPassword
     .catch(err => {
         console.log("error:", err);
-    });
+        res.render("log-in", {
+                noEmail: true
+            }); //closes render
+    }); //closes catch
+}); //closes post
+
+app.get('/logout', (req, res) => {
+    req.session = null;
+    res.redirect('/register');
 });
+
 
 app.get("/profile", (req, res) => {
     res.render("profile", {
@@ -107,12 +134,39 @@ app.get("/profile", (req, res) => {
 });
 
 app.post("/profile", (req, res) => {
-    db.profileInfo(req.body.age, req.body.city, req.body.homepage).then(result => {
-        res.redirect("/petition");
-    }).catch(err => {
-            console.log("error:", err);
-        });
+    db.profileFilledOut(req.session.newUserId).then(info => {
+        if (info.rows[0].age != null && info.rows[0].city != null && info.rows[0].homepage != null) {
+            res.redirect("/petition");
+        } else {
+            if (req.body.homepage.startsWith("http://")) {
+                req.body.homepage = "http://" + req.body.website;
+            }
+            return db.profileInfo(req.session.newUserId, req.body.age, req.body.city, req.body.homepage).then(result => {
+                console.log("result is", result);
+                res.redirect("/petition");
+            }).catch(err => {
+                    console.log("error:", err);
+                    res.redirect("/petition");
+                });
+        }
+
 });
+});
+
+
+// function hasSigned(req, res, next) {
+//     return db.alreadySigned(req.session.newUserId).then(result => {
+//         console.log("RESULT IS:", result);
+//         if (result.rows[0].signature == null) {
+//             console.log("NOT SIGNED YET");
+//             next();
+//         } else {
+//             console.log("SIGNED");
+//             res.redirect("/thank-you");
+//         }
+//     })
+// }
+
 
 
 app.get("/petition", (req, res) => {
@@ -128,11 +182,19 @@ app.get("/petition", (req, res) => {
     });
 });
 
+
+//  function requireNoSignature(req, res, next) {
+//     if(req.session.signatureId) {
+//         return res.redirect('/thank-you')
+//     }
+//     next();
+// }
+
 app.post("/petition", (req, res) => {
-    db.newSigner(req.body.signature)
+    db.newSigner(req.session.newUserId, req.body.signature)
         .then(result => {
             console.log("New person signed your petition!");
-            req.session.signId = result.rows[0].id;
+            req.session.signatureId = true;
             res.redirect("/thank-you");
         })
         .catch(err => {
@@ -143,7 +205,9 @@ app.post("/petition", (req, res) => {
 app.get("/thank-you", (req, res) => {
     db.allSigners()
         .then(total => {
-            return db.getImage(req.session.signId).then(result => {
+            console.log("req.session.newUserId", req.session.newUserId);
+            return db.getImage(req.session.newUserId).then(result => {
+                // console.log("LAST RESULT:", result);
                 res.render("thank-you", {
                     image: result.rows[0].signature,
                     total: total.rowCount,
@@ -153,13 +217,14 @@ app.get("/thank-you", (req, res) => {
         })
         .catch(err => {
             console.log("error:", err);
+
         });
 });
 
 app.get("/signed", (req, res) => {
     db.allSigners()
         .then(signers => {
-            console.log("ALL SIGNERS:", signers.rows);
+            // console.log("ALL SIGNERS:", signers);
             res.render("signed", {
                 signers: signers.rows,
                 layout: "main"
@@ -168,19 +233,31 @@ app.get("/signed", (req, res) => {
         .catch(err => {
             console.log("error:", err);
         });
-
-    //pull out id and signature here
-    //once you have a big signature url in this route,
-    // you can render it on screen by putting it in an image tag
 });
 
-app.listen(process.env.PORT || 8080, () => console.log("Listening!"));
+// app.get("/signed/:city")
 
-// app.get('/cities', (req, res) => {
-//     db.getCities().then(results => {
-//         console.log('Results.rows from db.cities:', results.rows);
-//     });
-// });
+
+if (require.main == module) {
+app.listen(process.env.PORT || 8080, () => console.log("Listening!"));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // app.post('/add-city', (req, res) => {
 // //normally we'd handle here user's input. but now we're using postman:
@@ -191,20 +268,3 @@ app.listen(process.env.PORT || 8080, () => console.log("Listening!"));
 //         console.log('error:', err);
 //     });
 // });
-
-// var bcrypt = require('bcryptjs');
-//
-// function checkPassword(textEnteredInLoginForm, hashedPasswordFromDatabase) {
-//     return new Promise(function(resolve, reject) {
-//         bcrypt.compare(textEnteredInLoginForm, hashedPasswordFromDatabase, function(err, doesMatch) {
-//             if (err) {
-//                 reject(err);
-//             } else {
-//                 resolve(doesMatch);
-//             }
-//         });
-//     });
-// }
-//
-// if doesMatch is true, we let the user to log in, if it's false - the user can't login
-//we pass to textEnteredInLoginForm the password that user put in the input field

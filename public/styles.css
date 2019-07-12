@@ -2,6 +2,10 @@
     margin: 0;
 }
 
+ul {
+    list-style: none;
+}
+
 body {
     background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('cereal.jpeg');
     background-size: cover;

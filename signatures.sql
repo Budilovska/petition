@@ -1,10 +1,10 @@
--- DROP TABLE IF EXISTS signatures;
--- DROP TABLE IF EXISTS users;
--- DROP TABLE IF EXISTS user_profiles;
+DROP TABLE IF EXISTS signatures CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS user_profiles CASCADE;
 
 CREATE TABLE signatures(
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
+    user_id INT REFERENCES users(id) UNIQUE,
     signature TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -20,11 +20,15 @@ CREATE TABLE users(
 
 CREATE TABLE user_profiles(
 id SERIAL PRIMARY KEY,
-user_id INT REFERENCES users(id),
+user_id INT REFERENCES users(id) UNIQUE,
 age INT,
 city VARCHAR(100),
 homepage VARCHAR(300)
 );
+--
+-- SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.homepage
+-- FULL OUTER JOIN user_profiles ON users.id = user_profiles.user_id
+
 
 
 --run this command once when u create a table

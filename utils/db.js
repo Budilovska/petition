@@ -9,13 +9,13 @@ if(process.env.DATABASE_URL) {
 
 
 exports.allSigners = function() {
-    return db.query("SELECT * FROM signatures");
+    return db.query("SELECT users.first, users.last, user_profiles.age, user_profiles.city, user_profiles.homepage FROM users FULL OUTER JOIN user_profiles ON users.id = user_profiles.user_id");
 };
 
-exports.newSigner = function(signature) {
+exports.newSigner = function(user_id, signature) {
     return db.query(
-        "INSERT INTO signatures (signature) VALUES ($1) RETURNING id",
-        [signature]
+        "INSERT INTO signatures (user_id, signature) VALUES ($1, $2)",
+        [user_id, signature]
     );
 };
 
@@ -35,44 +35,55 @@ exports.getName = function(id) {
         "SELECT first FROM users WHERE id=$1", [id]);
 };
 
-exports.getPassword = function(email) {
+// exports.getPassword = function(email) {
+//     return db.query(
+//         "SELECT password, id FROM users WHERE email=$1", [email]);
+// };
+
+exports.getPasswordCheckIfSigned = function(email) {
     return db.query(
-        "SELECT password, id FROM users WHERE email=$1", [email]);
+                "SELECT users.password, users.id, signatures.signature FROM users FULL OUTER JOIN signatures ON users.id = signatures.user_id WHERE users.email=$1", [email]);
 };
 
-exports.getEmail = function(email) {
+exports.profileInfo = function(user_id, age, city, homepage) {
     return db.query(
-        "SELECT email FROM users WHERE email=$1", [email]);
-};
-
-exports.profileInfo = function(age, city, homepage) {
-    return db.query(
-        "INSERT INTO user_profiles (age, city, homepage) VALUES ($1, $2, $3)",
-        [age, city, homepage]
+        "INSERT INTO user_profiles (user_id, age, city, homepage) VALUES ($1, $2, $3, $4)",
+        [user_id || null, age || null, city || null, homepage || null]
     );
 };
 
-// exports.joinUsersSign = function(id) {
-//     return db.query("SELECT users.first, users.last, users.email, users.password FROM users JOIN signatures ON users.id = signatures.user_id");
-// }
-//
-// SELECT users.first, signature FROM users FULL OUTER JOIN signatures on users.id = signatures.user_id;
-
-// exports.getNameAndSignature = function(id) {
-//     return db.query(`SELECT first, signature FROM users FULL OUTER JOIN signatures on users.id = signatures.user_ID WHERE users.id='${id}'`);
-// };
+exports.alreadySigned = function(id) {
+    return db.query("SELECT users.first, signatures.signature FROM users FULL OUTER JOIN signatures ON users.id = signatures.user_id WHERE users.id=$1", [id]);
+};
 
 
+exports.profileFilledOut = function(id) {
+    return db.query("SELECT user_profiles.age, user_profiles.city, user_profiles.homepage FROM user_profiles FULL OUTER JOIN users on users.id = user_profiles.user_id WHERE users.id=$1", [id]);
+};
 
-// we have to envoke this function in our server:
-// exports.getCities = function getCities() {
-//     return db.query('SELECT * FROM cities');
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //db.query returns a promise
 
 //$1 syntax is used to prevent a type of attack called sequel injection
-// exports.addCity = function addCity(city, country) {  //it can be any words like funky chiken:D
-//     return db.query('INSERT INTO cities (city, country) VALUES ($1, $2)', [ city, country ]);   //the array is the second argument with infos we need to pass
-//
-// };
