@@ -1,0 +1,18 @@
+{{> nav-menu}}
+
+<h2>Edit your profile<h2>
+
+    <form action="/edit" method="post">
+        <div class="edit-container">
+
+            <input class="edit" name="first" type="text" value="{{first}}">First name</input>
+            <input class="edit" name="last" type="text" value="{{last}}">Last name</input>
+            <input class="edit" name="email" type="text" value="{{email}}">Email Address</input>
+            <input class="edit" name="age" type="text" value="{{age}}">Age</input>
+            <input class="edit" name="city" type="text" value="{{city}}">City</input>
+            <input class="edit" name="homepage" type="text" value="{{homepage}}">Homepage</input>
+            <input class="edit" name="password" type="password">Password</input>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button id="update-btn">Update</button>
+        </div>
+    </form>

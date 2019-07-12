@@ -173,17 +173,17 @@ app.get("/thank-you", notLoggedIn, (req, res) => {
         });
 });
 
-app.post("/thank-you", notLoggedIn, (req, res) => {
-    // db.deleteSignature(req.session.newUserId).then(() => {
-    //     req.session.signatureId = false;
-    //     res.redirect('/petition');
-    // }).catch(err => {
-    //     console.log("error:", err);
-    // });
-});
+// app.post("/thank-you", notLoggedIn, (req, res) => {
+//     // db.deleteSignature(req.session.newUserId).then(() => {
+//     //     req.session.signatureId = false;
+//     //     res.redirect('/petition');
+//     // }).catch(err => {
+//     //     console.log("error:", err);
+//     // });
+// });
 
 app.get("/signed", notLoggedIn, (req, res) => {
-    db.allSigners()
+     db.allSigners()
         .then(signers => {
             // console.log("ALL SIGNERS:", signers);
             res.render("signed", {
@@ -196,14 +196,44 @@ app.get("/signed", notLoggedIn, (req, res) => {
         });
 });
 
-app.get('/signed/:city', notLoggedIn, (req, res) => {
+app.get("/signed/:city", notLoggedIn, (req, res) => {
     db.cities(req.params.city.toLowerCase()).then(results => {
-        res.render('cities', {
+        res.render("cities", {
             city: req.params.city,
             signers: results.rows
         });
+    }).catch(err => {
+        console.log("error:", err);
     });
 });
+
+app.get("/edit", notLoggedIn, (req, res) => {
+    return db.getAllProfileInfo(req.session.newUserId).then(info => {
+        // console.log("INFO", info);
+        res.render("edit", {
+            first: info.rows[0].first,
+            last: info.rows[0].last,
+            email: info.rows[0].email,
+            age: info.rows[0].age,
+            city: info.rows[0].city,
+            homepage: info.rows[0].homepage
+            });
+        }).catch(err => {
+            console.log("error:", err);
+        });
+    });
+
+app.post("/edit", notLoggedIn, (req, res) => {
+    db.updateUsers(req.session.newUserId, req.body.first, req.body.last, req.body.email).then(() => {
+
+        db.updateUserProfiles(req.session.newUserId, req.body.age, req.body.city, req.body.homepage).then(() => {
+            res.redirect("/thank-you");
+        }).catch(err => {
+            console.log("error:", err);
+        });
+    });
+});
+
 
 
 if (require.main == module) {

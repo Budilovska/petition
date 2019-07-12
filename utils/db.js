@@ -64,11 +64,23 @@ exports.deleteSignature = function(id) {
     return db.query("DELETE FROM signatures WHERE user_ID=$1", [id]);
 };
 
+exports.getAllProfileInfo = function(id) {
+    return db.query("SELECT first, last, email, age, city, homepage, password FROM users FULL OUTER JOIN user_profiles ON users.id = user_profiles.user_id WHERE users.id=$1", [id]);
+}
 
+exports.updateUsers = function(id, first, last, email) {
+    return db.query(
+        "UPDATE users SET first=$2, last=$3, email=$4 WHERE id=$1",
+        [id, first, last, email]
+    );
+};
 
-
-
-
+exports.updateUserProfiles = function(user_id, age, city, homepage) {
+    return db.query(
+        "INSERT INTO user_profiles (user_id, age, city, homepage) VALUES ($1, $2, $3, $4) ON CONFLICT (user_id) DO UPDATE SET age=$2, city=$3, homepage=$4",
+        [user_id, age || null, city || null, homepage || null]
+    );
+};
 
 
 
