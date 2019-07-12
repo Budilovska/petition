@@ -6,8 +6,7 @@ const bc = require("./utils/bc");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 var cookieSession = require("cookie-session");
-// const {requireLoggedOut,
-//         requireSignature, requireNoSignature} = require('./middleware');
+const {notLoggedIn, loggedIn, hasNoSignature} = require('./middleware');
 const csurf = require("csurf");
 
 app.use(express.static("./public"));
@@ -34,45 +33,22 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use((req, res, next) => {
-// //check to see if they're loged in - send them to register, if they're loged in - let them go wherevver they need
-// if (!req.session.newUserId && req.url !="/register" && eq.url !="/log-in") {
-//     res.redirect("/register")
-// } else {
-//     next();
-// }
-// });
-
-
 app.engine("handlebars", hb());
 app.set("view engine", "handlebars");
 //
-// app.use((req, res, next) => {
-//     if (req.session.signatureId && req.url == "/petition") {
-//         res.redirect("/signed");
-//     } else {
-//         next();
-//     }
-// });
+
 
 app.get("/", (req, res) => {
     res.redirect("/register");
 });
 
-// function requireLoggedOut(req, res, next) {
-//     if (req.session.newUserId) {
-//         return res.redirect('/petition')
-//     }
-//     next();
-// }
-
-app.get("/register", (req, res) => {
+app.get("/register", loggedIn, (req, res) => {
     res.render("register", {
         layout: "main"
     });
 });
 
-app.post("/register", (req, res) => {
+app.post("/register", loggedIn, (req, res) => {
         bc.hashPassword(req.body.password).then(hashPass => {
         // console.log("HASH IS:", hashPass);
                 return db.registerUser(req.body.first, req.body.last, req.body.email, hashPass)
@@ -87,13 +63,13 @@ app.post("/register", (req, res) => {
         });
 });
 
-app.get("/log-in", (req, res) => {
+app.get("/log-in", loggedIn, (req, res) => {
     res.render("log-in", {
         layout: "main"
     });
 });
 
-app.post("/log-in", (req, res) => {
+app.post("/log-in", loggedIn, (req, res) => {
     db.getPasswordCheckIfSigned(req.body.email).then(infos => {
         // console.log("infos.rows[0].signature", infos.rows[0].signature);
         req.session.newUserId = infos.rows[0].id;
@@ -127,13 +103,13 @@ app.get('/logout', (req, res) => {
 });
 
 
-app.get("/profile", (req, res) => {
+app.get("/profile", notLoggedIn, (req, res) => {
     res.render("profile", {
         layout: "main"
     });
 });
 
-app.post("/profile", (req, res) => {
+app.post("/profile", notLoggedIn, (req, res) => {
     db.profileFilledOut(req.session.newUserId).then(info => {
         if (info.rows[0].age != null && info.rows[0].city != null && info.rows[0].homepage != null) {
             res.redirect("/petition");
@@ -153,23 +129,7 @@ app.post("/profile", (req, res) => {
 });
 });
 
-
-// function hasSigned(req, res, next) {
-//     return db.alreadySigned(req.session.newUserId).then(result => {
-//         console.log("RESULT IS:", result);
-//         if (result.rows[0].signature == null) {
-//             console.log("NOT SIGNED YET");
-//             next();
-//         } else {
-//             console.log("SIGNED");
-//             res.redirect("/thank-you");
-//         }
-//     })
-// }
-
-
-
-app.get("/petition", (req, res) => {
+app.get("/petition", notLoggedIn, (req, res) => {
     db.getName(req.session.newUserId).then(name => {
         console.log(name);
         res.render("petition", {
@@ -182,15 +142,7 @@ app.get("/petition", (req, res) => {
     });
 });
 
-
-//  function requireNoSignature(req, res, next) {
-//     if(req.session.signatureId) {
-//         return res.redirect('/thank-you')
-//     }
-//     next();
-// }
-
-app.post("/petition", (req, res) => {
+app.post("/petition", notLoggedIn, (req, res) => {
     db.newSigner(req.session.newUserId, req.body.signature)
         .then(result => {
             console.log("New person signed your petition!");
@@ -202,7 +154,7 @@ app.post("/petition", (req, res) => {
         });
 });
 
-app.get("/thank-you", (req, res) => {
+app.get("/thank-you", notLoggedIn, (req, res) => {
     db.allSigners()
         .then(total => {
             console.log("req.session.newUserId", req.session.newUserId);
@@ -221,7 +173,16 @@ app.get("/thank-you", (req, res) => {
         });
 });
 
-app.get("/signed", (req, res) => {
+app.post("/thank-you", notLoggedIn, (req, res) => {
+    // db.deleteSignature(req.session.newUserId).then(() => {
+    //     req.session.signatureId = false;
+    //     res.redirect('/petition');
+    // }).catch(err => {
+    //     console.log("error:", err);
+    // });
+});
+
+app.get("/signed", notLoggedIn, (req, res) => {
     db.allSigners()
         .then(signers => {
             // console.log("ALL SIGNERS:", signers);
@@ -235,13 +196,19 @@ app.get("/signed", (req, res) => {
         });
 });
 
-// app.get("/signed/:city")
+app.get('/signed/:city', notLoggedIn, (req, res) => {
+    db.cities(req.params.city.toLowerCase()).then(results => {
+        res.render('cities', {
+            city: req.params.city,
+            signers: results.rows
+        });
+    });
+});
 
 
 if (require.main == module) {
 app.listen(process.env.PORT || 8080, () => console.log("Listening!"));
 }
-
 
 
 

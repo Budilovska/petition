@@ -1,0 +1,17 @@
+{{> nav-menu portfolio=true}}
+
+<h2 class="underline">They also got it right in {{city}}</h2>
+
+<div class="all-signers">
+    <ul>
+        {{#signers}}
+    <li>
+        {{#if homepage}} <a href="{{homepage}}">            {{first}} {{last}}</a>
+            {{else}} {{first}} {{last}}
+        {{/if}}
+        {{#if age}}
+        {{age}} {{/if}}
+     </li>
+    {{/signers}}
+</ul>
+</div>

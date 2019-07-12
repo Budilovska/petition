@@ -35,11 +35,6 @@ exports.getName = function(id) {
         "SELECT first FROM users WHERE id=$1", [id]);
 };
 
-// exports.getPassword = function(email) {
-//     return db.query(
-//         "SELECT password, id FROM users WHERE email=$1", [email]);
-// };
-
 exports.getPasswordCheckIfSigned = function(email) {
     return db.query(
                 "SELECT users.password, users.id, signatures.signature FROM users FULL OUTER JOIN signatures ON users.id = signatures.user_id WHERE users.email=$1", [email]);
@@ -61,8 +56,13 @@ exports.profileFilledOut = function(id) {
     return db.query("SELECT user_profiles.age, user_profiles.city, user_profiles.homepage FROM user_profiles FULL OUTER JOIN users on users.id = user_profiles.user_id WHERE users.id=$1", [id]);
 };
 
+exports.cities = function(city) {
+    return db.query("SELECT first, last, age, homepage FROM users FULL OUTER JOIN user_profiles ON users.id = user_profiles.user_id WHERE LOWER(user_profiles.city)=$1", [city]);
+};
 
-
+exports.deleteSignature = function(id) {
+    return db.query("DELETE FROM signatures WHERE user_ID=$1", [id]);
+};
 
 
 
