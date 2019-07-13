@@ -173,12 +173,12 @@ app.post("/petition", notLoggedIn, (req, res) => {
         });
 });
 
-app.get("/thank-you", notLoggedIn, requireSignature, (req, res) => {
+app.get("/thank-you", notLoggedIn, (req, res) => {
     db.allSigners()
         .then(total => {
             console.log("req.session.newUserId", req.session.newUserId);
             return db.getImage(req.session.newUserId).then(result => {
-                // console.log("LAST RESULT:", result);
+                console.log(result.rows[0]);
                 res.render("thank-you", {
                     image: result.rows[0].signature,
                     total: total.rowCount,
@@ -191,7 +191,7 @@ app.get("/thank-you", notLoggedIn, requireSignature, (req, res) => {
         });
 });
 
-app.get("/signed", notLoggedIn, requireSignature, (req, res) => {
+app.get("/signed", notLoggedIn, (req, res) => {
     db.allSigners()
         .then(signers => {
             // console.log("ALL SIGNERS:", signers);

@@ -20,7 +20,7 @@ exports.newSigner = function(user_id, signature) {
 };
 
 exports.getImage = function(id) {
-    return db.query("SELECT signature FROM signatures WHERE id=$1", [id]);
+    return db.query("SELECT signature FROM signatures WHERE user_id=$1", [id]);
 };
 
 exports.registerUser = function(first, last, email, password) {

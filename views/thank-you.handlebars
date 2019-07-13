@@ -5,12 +5,14 @@
         <title></title>
     </head>
     <body>
+        <nav>
+        <h4 class="nav-text">Thank you for becoming one of us!<h4>
+        {{> nav-menu portfolio=true}}
+        </nav>
         <img src="ryan.gif">
         <form action="/thank-you" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                        {{> nav-menu portfolio=true}}
                 </form>
-        <h1>Thank you for becoming one of us!</h1>
 
         <img src="{{image}}">
 

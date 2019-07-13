@@ -6,19 +6,34 @@ ul {
     list-style: none;
 }
 
-body {
-    background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('cereal.jpeg');
+.container-register {
+    background-image: url("milk.jpeg");
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* body {
+    display: grid;
+    min-height: 100vh;
+    grid-template-rows: 100px 1fr;
+} */
+
+/* nav {
+    grid-column: 1 / 2;
+    background-color: pink;
+} */
+    /* background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('cereal.jpeg');
     background-size: cover;
     display: flex;
     align-items: flex-end;
-}
+} */
 
-canvas {
+/* canvas {
     border: 1px solid magenta;
 }
 
 h1 {
-    color: white;
+    color: black;
     font-family: 'Poiret One', cursive;
     font-size: 120px;
 }
@@ -52,4 +67,4 @@ font-size: 14px;
 display: flex;
 flex-direction: column;
 align-items: center;
-}
+} */
