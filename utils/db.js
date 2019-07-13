@@ -82,14 +82,12 @@ exports.updateUserProfiles = function(user_id, age, city, homepage) {
     );
 };
 
-
-
-
-
-
-
-
-
+exports.updateUsersWithPass = function(id, first, last, email, password) {
+    return db.query(
+        "UPDATE users SET first=$2, last=$3, email=$4, password=$5 WHERE id=$1",
+        [id, first, last, email, password]
+    );
+};
 
 
 
