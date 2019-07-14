@@ -1,23 +1,28 @@
-<nav>
-    {{#signers}}
-<h4 class="nav-text">We love you, {{first}}!</h4>
-{{/signers}}
-{{> nav-menu portfolio=true}}
-</nav>
+<div class="container-signed">
 
-
-<h2 class="underline">They also got it right in {{city}}</h2>
+<h2 id="signed-text">They also pour milk before cereals in {{city}}</h2>
 
 <div class="all-signers">
     <ul>
         {{#signers}}
     <li>
-        {{#if homepage}} <a href="{{homepage}}">            {{first}} {{last}}</a>
+        {{#if homepage}} <a href="{{homepage}}"> {{first}} {{last}}</a>
             {{else}} {{first}} {{last}}
         {{/if}}
         {{#if age}}
-        {{age}} {{/if}}
+        |  {{age}}{{/if}}
      </li>
     {{/signers}}
 </ul>
+</div>
+
+<!-- {{#signers}}
+<h4 class="nav-text">We love you, {{first}}!</h4>
+{{/signers}} -->
+
+<div class="nav">
+{{> nav-menu portfolio=true}}
+</div>
+
+
 </div>

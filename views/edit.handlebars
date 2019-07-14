@@ -1,19 +1,27 @@
-<nav>
-<h4 class="nav-text">Update your profile<h4>
-{{> nav-menu}}
-</nav>
+<!-- <div class="edit-profile-container"> -->
 
+<div class="edit-inputs">
     <form action="/edit" method="post">
-        <div class="edit-container">
-
-            <input class="edit" name="first" type="text" value="{{first}}">First name</input>
-            <input class="edit" name="last" type="text" value="{{last}}">Last name</input>
-            <input class="edit" name="email" type="text" value="{{email}}">Email Address</input>
-            <input class="edit" name="age" type="text" value="{{age}}">Age</input>
-            <input class="edit" name="city" type="text" value="{{city}}">City</input>
-            <input class="edit" name="homepage" type="text" value="{{homepage}}">Homepage</input>
-            <input class="edit" name="password" type="password">Password</input>
+        <ul>
+            <li>First name<input class="edit" name="first" type="text" value="{{first}}"></li>
+            <li>Last name<input class="edit" name="last" type="text" value="{{last}}"></li>
+            <li>Email<input class="edit" name="email" type="text" value="{{email}}"></li>
+            <li>Age<input class="edit" name="age" type="text" value="{{age}}"></li>
+            <li>City<input class="edit" name="city" type="text" value="{{city}}"></li>
+            <li>Homepage<input class="edit" name="homepage" type="text" value="{{homepage}}"></li>
+            <li>Password<input class="edit" name="password" type="password"></li>
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button id="update-btn">Update</button>
-        </div>
+        </ul>
+
+</div>
+
+<div>
+<img class="profile-image" src="morning.jpg">
+</div>
+
+<div class="nav">
+<button>update profile</button>
+{{> nav-menu}}
+</div>
     </form>
+<!-- </div> -->

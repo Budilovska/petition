@@ -1,22 +1,28 @@
-{{> nav-menu portfolio=true}}
+<div class="container-signed">
 
-<h2>We the undersigned demand that the cereal be eaten properly </h2>
+<h2 id="signed-text">We, the undersigned, <span>pour Milk Before Cereal</span></h2>
 
 <div class="all-signers">
     <ul>
         {{#signers}}
 
-    <li> {{#if homepage}} <a href="{{homepage}}">   {{first}} {{last}} </a>
-        {{else}} {{first}} {{last}}
+    <li> {{#if homepage}} <a class="sign-href" href="{{homepage}}">   {{first}}    {{last}} </a>
+        {{else}} {{first}}    {{last}}
         {{/if}}
 
-        {{#if age}}
-        {{age}} {{/if}}
+        {{#if age}} |
+        {{age}} | {{/if}}
 
-        {{#if city}} <a href="/signed/{{city}}"> {{city}} </a>
+        {{#if city}} <a class="sign-href" href="/signed/{{city}}"> {{city}} </a>
         {{/if}}
     </li>
 
     {{/signers}}
 </ul>
 </div>
+
+<div class="nav">
+{{> nav-menu portfolio=true}}
+<div>
+
+<div>

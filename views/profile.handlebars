@@ -1,13 +1,22 @@
-<h2>Please tell us a little bit more about yourself (optional)</h2>
-<form action="/profile" method="post">
-            <div class="sign-container">
+<img class="profile-image" src="still-life.jpg">
 
-                <input name="age" placeholder="Age" type="text">
-                <input name="city" placeholder="City" type="text">
-                <input name="homepage" placeholder="Homepage" type="text">
+<h2 class="profile-text">Tell us a little more about yourself or proceed straight to signing the petition</h2>
+
+
+<form action="/profile" method="post">
+<div class="edit-inputs" id="add-more-info">
+<ul>
+                <li><input name="age" placeholder="Age" type="text"></li>
+                <li><input name="city" placeholder="City" type="text"></li>
+                <li><input name="homepage" placeholder="Homepage" type="text"></li>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-                <button id="continue-btn">Continue</button>
-                {{> nav-menu}}
+            </ul>
+
+    </div>
+            <div class="nav">
+            <button id="continue-btn">continue</button>
+            {{> nav-menu}}
             </div>
+
         </form>

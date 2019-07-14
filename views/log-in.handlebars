@@ -1,17 +1,22 @@
-<h1>Please log in</h1>
+<div class="container-register">
+
+<h5 id="login-text">Log In</h5>
 {{#if invalid}}
-<h5>The password you have entered is invalid, try again</h5>
+<h6>The password you have entered is invalid, try again</h6>
 {{/if}}
 
 {{#if noEmail}}
-<h5>Your email address is invalid. Please enter a valid address or <a href="/register">register.</a></h5>
+<h6>Your email address is invalid. Please enter a valid address or <a href="/register">register.</a></h6>
 {{/if}}
 <form action="/log-in" method="post">
             <div class="sign-container">
-                <input name="email" placeholder="Email Address" type="text">
-                <input name="password" placeholder="Password" type="password">
+                <ul id="login-inp">
+                <li id="login-li"><input name="email" placeholder="Email Address" type="text"></li>
+                <li id="login-li"><input name="password" placeholder="Password" type="password"></li>
                 <input type="hidden" name="_csrf" value="{{csrfToken}}">
-
-                <button id="login-btn">Log in</button>
+</ul>
+                <button id="login-btn">Go!</button>
             </div>
         </form>
+
+    </div>

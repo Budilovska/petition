@@ -5,19 +5,22 @@
         <title></title>
     </head>
     <body>
-        <nav>
-        <h4 class="nav-text">Thank you for becoming one of us!<h4>
+        <div class="container-petition">
+
+        <h4 id="thanks-text">Thank you for supporting us, thus making yourself known as a man of refined taste and a precise understanding of what a real milk and cereal breakfast should be.<h4>
+
+        <div class="nav">
         {{> nav-menu portfolio=true}}
-        </nav>
-        <img src="ryan.gif">
+    </div>
         <form action="/thank-you" method="post">
                         <input type="hidden" name="_csrf" value="{{csrfToken}}">
                 </form>
 
-        <img src="{{image}}">
+        <img id="signature-image" src="{{image}}">
 
 
 
-        <a href='/signed'>See all {{total}} signers</a>
+        <a id="see-all" href='/signed'>see all {{total}} signers</a>
+        <div>
     </body>
 </html>

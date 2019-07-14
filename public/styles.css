@@ -1,70 +1,429 @@
 * {
+    box-sizing: border-box;
     margin: 0;
-}
-
-ul {
-    list-style: none;
 }
 
 .container-register {
     background-image: url("milk.jpeg");
     min-height: 100vh;
     width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
-/* body {
-    display: grid;
-    min-height: 100vh;
-    grid-template-rows: 100px 1fr;
-} */
-
-/* nav {
-    grid-column: 1 / 2;
-    background-color: pink;
-} */
-    /* background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('cereal.jpeg');
-    background-size: cover;
-    display: flex;
-    align-items: flex-end;
-} */
-
-/* canvas {
-    border: 1px solid magenta;
+#menu-parent {
+position: relative;
 }
 
-h1 {
+#menu-children {
+    position: fixed;
+    left: 1050px;
+    top: 410px;
+}
+
+.container-register h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    font-size: 100px;
+    position: fixed;
+    left: 280px;
+    top: 380px;
+}
+
+.container-register h3 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    font-size: 20px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.container-register a {
     color: black;
-    font-family: 'Poiret One', cursive;
-    font-size: 120px;
+    text-decoration: none;
 }
 
-p {
-    color: white;
-    font-size: 16px;
-    font-family: serif;
+a:hover
+{
+     color: inherit;
+     text-decoration:none;
+     cursor:pointer;
 }
 
-.sign-container {
-    width: 400px;
-    border: 2px red;
-    width: 80%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.container-register input {
+    -webkit-appearance: none;
+   outline: none;
+   border: 0px;
+   outline-width: 0;
+   background: transparent;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
 }
 
-#right-wrong {
-    height: 300px;
+.register-inputs ul {
+    list-style: none;
+    padding: 0;
+    margin-left: 5px;
+    position: fixed;
+    left: 1052px;
+    top: 430px;
 }
 
-#hidden-input {
+.register-inputs li {
+    margin: 20px 0px;
+}
+
+#signup-btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    background: none;
+    color: black;
+	border: none;
+	padding: 0;
+
+	cursor: pointer;
+	outline: inherit;
+}
+
+#register-form {
     display: none;
 }
 
-.edit-container {
-font-size: 14px;
-display: flex;
-flex-direction: column;
-align-items: center;
+#login-me {
+    display: block;
+}
+
+#arrow {
+    opacity: 0.7;
+    width: 80px;
+    position: fixed;
+    top: 480px;
+    left: 653px;
+    transition-duration: 0.5s;
+    transition-property: transform;
+}
+
+@-webkit-keyframes hang {
+	50% {
+		transform: translateY(5px);
+	}
+
+	100% {
+		transform: translateY(10px);
+	}
+}
+
+	#arrow:hover {
+        opacity: 0.7;
+		transform: translateY(10px);
+		-webkit-animation-name: hang;
+		-webkit-animation-duration: 1.5s;
+		-webkit-animation-delay: $defaultDuration;
+		-webkit-animation-timing-function: linear;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-direction: alternate;
+}
+
+
+#info-box {
+    border: none;
+    /* background-color: white;
+    opacity: 0.8; */
+    width: 700px;
+    margin: auto;
+    transform: translateY(1000%);
+    z-index: 5;
+}
+
+.moveInfo #info-box {
+    /* transition-timing-function: step-end; */
+    transform: translateY(340%);
+    transition-duration: 1s;
+
+}
+
+#info-box p {
+    font-family: 'Lato', sans-serif;
+    color: black;
+    font-weight: 300;
+    opacity: 1;
+}
+
+/* LOGIN */
+
+#login-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    font-size: 100px;
+    position: fixed;
+    left: 550px;
+    top: 380px;
+}
+
+#login-btn {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    background: none;
+    color: black;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: inherit;
+    position: absolute;
+    left: 677px;
+    top: 635px;
+}
+
+#login-inp {
+    position: absolute;
+    top: 510px;
+    left: 600px;
+}
+
+#login-li {
+    margin: 20px 0px;
+    list-style: none;
+}
+
+h6 {
+    font-family: 'Lato', sans-serif;
+    color: black;
+    font-weight: 300;
+    font-size: 20px;
+    position: absolute;
+    left: 400px;
+    top: 300px;
+}
+/* EDIT PROFILE */
+.profile-image {
+    height: 900px;
+    float: right;
+}
+
+.edit-inputs {
+    float: left;
+    position: absolute;
+    top: 250px;
+    left: 50px;
+}
+
+
+.edit-inputs input {
+    width: 300px;
+    margin-left: 25px;
+    list-style: none;
+    -webkit-appearance: none;
+    /* border-top: transparent !important;
+ border-left: transparent !important;
+ border-right: transparent !important;
+ border-bottom: 1px solid #8D8A85 !important; */
+   border: 0;
+   outline-width: 0;
+   background: transparent;
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+.edit-inputs ul {
+    list-style: none;
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+}
+
+.edit-inputs li {
+    list-style: none;
+    margin: 25px;
+}
+
+.nav button, a{
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: inherit;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    /* margin: 0px 20px; */
+}
+
+.nav button {
+    margin-right: 20px;
+}
+
+.nav {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-text {
+    width: 500px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    position: absolute;
+    top: 170px;
+    left: 50px;
+}
+
+
+/* PROFILE INFO */
+
+/* #add-more-info input {
+    position: absolute;
+    top: 250px;
+    left: 50px;
 } */
+
+.edit-inputs {
+    position: absolute;
+    top: 250px;
+    left: 50px;
+}
+
+/* PETITION */
+
+.container-petition {
+    background-image: url("granola1.jpeg");
+background-size: cover;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+}
+
+canvas {
+    position: absolute;
+    border-bottom: 2px solid white;
+    top: 300px;
+    left: 500px;
+    /* background: black; */
+    /* opacity: 0.2; */
+}
+
+#sign-here {
+    position: absolute;
+    top: 400px;
+    left: 520px;
+    font-family: 'Dancing Script', cursive;
+    font-weight: 100;
+    font-size: 28px;
+    color: white;
+    transform: translateY(0%)
+}
+
+
+.move-sign-here #sign-here {
+transform: translateY(180%);
+transition-duration: 1s;
+}
+
+#submit-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    outline: inherit;
+    font-family: 'Dancing Script', cursive;
+    font-weight: 100;
+    font-size: 28px;
+    color: white;
+    text-decoration: none;
+    position: absolute;
+    top: 465px;
+    left: 900px;
+}
+
+.nav-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 200;
+    font-size: 20px;
+    color: white;
+    position: absolute;
+    top: 30px;
+    right: 250px;
+}
+
+#logout-btn {
+    margin: 0 25px;
+}
+
+#signature-image {
+    position: absolute;
+    top: 430px;
+    left: 680px;
+}
+
+#thanks-text {
+    font-family: 'Dancing Script', cursive;
+    font-weight: 100;
+    font-size: 28px;
+    color: white;
+    position: absolute;
+    top: 300px;
+    left: 500px;
+    width: 500px;
+}
+
+#see-all {
+    position: absolute;
+    right: 255px;
+    top: 30px;
+}
+
+.container-signed {
+    background-image: url("bowls.jpeg");
+    background-size: cover;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+#signed-text {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 100;
+    font-size: 45px;
+    position: fixed;
+    left: 280px;
+    top: 380px;
+    color: black;
+    position: absolute;
+    left: 270px;
+    top: 150px;
+    /* width: 450px; */
+}
+
+.all-signers li {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: black;
+    list-style: none;
+    margin: 8px;
+}
+
+.all-signers ul {
+    position: absolute;
+    left: 560px;
+    top: 230px;
+    height: 670px;
+    overflow: scroll;
+    -webkit-mask-image: -webkit-gradient(linear, left top, left bottom,
+    from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+}
+
+.sign-href {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: white;
+}

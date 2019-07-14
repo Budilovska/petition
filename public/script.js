@@ -3,8 +3,9 @@ console.log("Client-side is running");
 const canvas = document.querySelector("canvas");
 const submitBtn = document.getElementById("submit-btn");
 const c = canvas.getContext("2d");
-c.strokeStyle = "red";
-c.lineWidth = "1";
+c.strokeStyle = "white";
+c.lineWidth = "2";
+const register = document.getElementById("register-me");
 
 const mousePos = { x: 0, y: 0 };
 let drawing = false;
@@ -16,6 +17,8 @@ function getMousePosition(e) {
 }
 
 canvas.addEventListener("mousedown", function(e) {
+    const h3 = document.getElementById("#sign-here");
+     document.body.classList.add("move-sign-here");
     if (!drawing) {
         drawing = true;
         getMousePosition(e);

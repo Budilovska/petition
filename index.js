@@ -205,7 +205,7 @@ app.get("/signed", notLoggedIn, (req, res) => {
         });
 });
 
-app.get("/signed/:city", notLoggedIn, requireSignature, (req, res) => {
+app.get("/signed/:city", notLoggedIn, (req, res) => {
     db.cities(req.params.city.toLowerCase())
         .then(results => {
             res.render("cities", {
