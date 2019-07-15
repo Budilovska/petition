@@ -213,14 +213,14 @@ h6 {
 
 
 .edit-inputs input {
-    width: 300px;
+    width: 400px;
     margin-left: 25px;
     list-style: none;
     -webkit-appearance: none;
-    /* border-top: transparent !important;
+/* border-top: transparent !important;
  border-left: transparent !important;
  border-right: transparent !important;
- border-bottom: 1px solid #8D8A85 !important; */
+ border-bottom: 1px solid #AAB2B5 !important;  */
    border: 0;
    outline-width: 0;
    background: transparent;
@@ -415,7 +415,7 @@ transition-duration: 1s;
     position: absolute;
     left: 560px;
     top: 230px;
-    height: 670px;
+    height: 650px;
     overflow: scroll;
     -webkit-mask-image: -webkit-gradient(linear, left top, left bottom,
     from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));

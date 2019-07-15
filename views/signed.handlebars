@@ -7,16 +7,15 @@
         {{#signers}}
 
     <li> {{#if homepage}} <a class="sign-href" href="{{homepage}}">   {{first}}    {{last}} </a>
-        {{else}} {{first}}    {{last}}
+        {{else}} {{first}} {{last}}
         {{/if}}
 
         {{#if age}} |
-        {{age}} | {{/if}}
+        {{age}} |  {{/if}}
 
         {{#if city}} <a class="sign-href" href="/signed/{{city}}"> {{city}} </a>
         {{/if}}
     </li>
-
     {{/signers}}
 </ul>
 </div>
